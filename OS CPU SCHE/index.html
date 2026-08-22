@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPU Scheduling Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="hero">
+    <div>
+        <span class="eyebrow">OPERATING SYSTEMS • CPU SCHEDULING</span>
+
+        <h1>
+            CPU Scheduling
+            <span>Dashboard</span>
+        </h1>
+
+        <p>
+            Compare FCFS, SJF, Round Robin and Priority Scheduling
+            using Waiting Time, Turnaround Time and Gantt Charts.
+        </p>
+    </div>
+
+    <div class="hero-badge">
+        LIVE
+        <b>SIMULATOR</b>
+    </div>
+</header>
+
+
+<main>
+
+    <!-- PROCESS INPUT -->
+    <section class="panel">
+
+        <div class="section-title">
+            <div>
+                <span class="eyebrow">INPUT</span>
+                <h2>Process Configuration</h2>
+            </div>
+
+            <div class="actions">
+                <button id="sampleBtn" class="secondary">
+                    Load Sample
+                </button>
+
+                <button id="addBtn" class="primary">
+                    + Add Process
+                </button>
+            </div>
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table id="processTable">
+
+                <thead>
+                    <tr>
+                        <th>Process</th>
+                        <th>Arrival Time</th>
+                        <th>Burst Time</th>
+                        <th>Priority</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody></tbody>
+
+            </table>
+
+        </div>
+
+
+        <div class="rr-settings">
+
+            <label>
+                Round Robin Time Quantum
+
+                <input
+                    id="quantum"
+                    type="number"
+                    min="1"
+                    value="2"
+                >
+            </label>
+
+
+            <label class="toggle-label">
+
+                <input
+                    id="preemptivePriority"
+                    type="checkbox"
+                >
+
+                <span class="toggle"></span>
+
+                Preemptive Priority
+
+            </label>
+
+
+            <button id="runBtn" class="run">
+                ▶ Run Comparison
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- WINNER -->
+    <section id="winner" class="winner hidden"></section>
+
+
+    <!-- METRICS -->
+    <section class="metrics-grid">
+
+        <article class="metric-card">
+
+            <div class="metric-icon">
+                ⚡
+            </div>
+
+            <div>
+                <small>BEST ALGORITHM</small>
+                <strong id="bestAlgo">—</strong>
+            </div>
+
+        </article>
+
+
+        <article class="metric-card">
+
+            <div class="metric-icon">
+                ⏱
+            </div>
+
+            <div>
+                <small>LOWEST AVG WT</small>
+                <strong id="bestWT">—</strong>
+            </div>
+
+        </article>
+
+
+        <article class="metric-card">
+
+            <div class="metric-icon">
+                ◷
+            </div>
+
+            <div>
+                <small>LOWEST AVG TAT</small>
+                <strong id="bestTAT">—</strong>
+            </div>
+
+        </article>
+
+
+        <article class="metric-card">
+
+            <div class="metric-icon">
+                ▦
+            </div>
+
+            <div>
+                <small>PROCESSES</small>
+                <strong id="count">—</strong>
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <!-- COMPARISON -->
+    <section class="panel">
+
+        <div class="section-title">
+
+            <div>
+                <span class="eyebrow">COMPARISON</span>
+                <h2>Performance Overview</h2>
+            </div>
+
+        </div>
+
+
+        <div class="chart-wrap">
+            <canvas id="comparisonChart"></canvas>
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table id="summaryTable">
+
+                <thead>
+
+                    <tr>
+                        <th>Algorithm</th>
+                        <th>Avg Waiting Time</th>
+                        <th>Avg Turnaround Time</th>
+                        <th>Avg Completion Time</th>
+                        <th>Verdict</th>
+                    </tr>
+
+                </thead>
+
+                <tbody></tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- GANTT CHART -->
+    <section class="panel">
+
+        <div class="section-title">
+
+            <div>
+                <span class="eyebrow">
+                    PROCESS VISUALIZATION
+                </span>
+
+                <h2>
+                    Gantt Timelines
+                </h2>
+            </div>
+
+        </div>
+
+
+        <div id="timelines"></div>
+
+    </section>
+
+
+    <!-- DETAILS -->
+    <section class="panel">
+
+        <div class="section-title">
+
+            <div>
+                <span class="eyebrow">
+                    DETAILS
+                </span>
+
+                <h2>
+                    Process Metrics
+                </h2>
+            </div>
+
+
+            <select id="detailAlgo"></select>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table id="detailTable">
+
+                <thead>
+
+                    <tr>
+                        <th>Process</th>
+                        <th>AT</th>
+                        <th>BT</th>
+                        <th>Priority</th>
+                        <th>CT</th>
+                        <th>TAT</th>
+                        <th>WT</th>
+                    </tr>
+
+                </thead>
+
+                <tbody></tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- ALGORITHM INFORMATION -->
+    <section class="info-grid">
+
+        <div class="info-card">
+
+            <b>FCFS</b>
+
+            <span>
+                FIRST COME FIRST SERVED
+            </span>
+
+            <p>
+                Processes execute in arrival order.
+                It is simple and non-preemptive.
+            </p>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <b>SJF</b>
+
+            <span>
+                SHORTEST JOB FIRST
+            </span>
+
+            <p>
+                The process having the shortest burst time
+                is selected first.
+            </p>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <b>RR</b>
+
+            <span>
+                ROUND ROBIN
+            </span>
+
+            <p>
+                Each process gets CPU time according to
+                the selected time quantum.
+            </p>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <b>PRIORITY</b>
+
+            <span>
+                PRIORITY SCHEDULING
+            </span>
+
+            <p>
+                The process with the highest priority
+                is executed first.
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+    CPU Scheduling Visualizer |
+    TAT = CT − AT |
+    WT = TAT − BT
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
